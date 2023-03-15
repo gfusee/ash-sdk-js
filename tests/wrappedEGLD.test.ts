@@ -1,6 +1,7 @@
 import { ContractManager } from "../src/helper/contracts";
 import { WRAPPED_EGLD } from "../src/const/wrappedEGLD";
 import BigNumber from "bignumber.js";
+import { Transaction } from "@multiversx/sdk-core/out";
 
 describe("testing wrapped EGLD contract", () => {
     const contract = ContractManager.getWrappedEGLDContract(
@@ -10,7 +11,7 @@ describe("testing wrapped EGLD contract", () => {
     test("#wrapEgld", async () => {
         const tx = await contract.wrapEgld(new BigNumber(0));
 
-        expect(tx).toBeInstanceOf(Object);
+        expect(tx).toBeInstanceOf(Transaction);
     });
 
    

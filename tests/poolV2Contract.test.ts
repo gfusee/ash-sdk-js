@@ -1,4 +1,4 @@
-import { Address, TokenPayment } from "@multiversx/sdk-core/out";
+import { Address, TokenPayment, Transaction } from "@multiversx/sdk-core/out";
 import { ASHSWAP_CONFIG } from "../src/const/ashswapConfig";
 import { ContractManager } from "../src/helper/contracts";
 import BigNumber from "bignumber.js";
@@ -11,7 +11,7 @@ describe("testing poolV2 constract", () => {
         const tokenPayments = [tokenPayment]
         const tx = await contract.addLiquidity("", tokenPayments, new BigNumber(0)) ;
 
-        expect(tx).toBeInstanceOf(Object);
+        expect(tx).toBeInstanceOf(Transaction);
     });
 
    
