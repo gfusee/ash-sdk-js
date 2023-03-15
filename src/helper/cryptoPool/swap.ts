@@ -2,9 +2,9 @@ import assert from "assert";
 import BigNumber from "bignumber.js";
 import { IESDTInfo } from "../token/token";
 import { TokenAmount } from "../token/tokenAmount";
-import { CurveV2Math } from "./math";
+import { CryptoPoolMath } from "./math";
 
-type CurveV2Context = {
+type CryptoPoolContext = {
     priceScale: BigNumber.Value;
     reserves: BigNumber.Value[];
     ann: BigNumber.Value;
@@ -16,13 +16,13 @@ type CurveV2Context = {
     midFee: BigNumber.Value;
     outFee: BigNumber.Value;
 };
-class CurveV2 {
+class CryptoPool {
     readonly nCoins: number;
     readonly tokens: IESDTInfo[];
     readonly precisions: BigNumber[];
     readonly PRECISION = new BigNumber(1e18);
-    readonly context: CurveV2Context;
-    constructor(tokens: IESDTInfo[], context: CurveV2Context) {
+    readonly context: CryptoPoolContext;
+    constructor(tokens: IESDTInfo[], context: CryptoPoolContext) {
         this.nCoins = tokens.length;
         if (this.nCoins !== 2) throw new Error("invalid number of tokens");
         this.tokens = tokens;
@@ -62,7 +62,7 @@ class CurveV2 {
         let { ann, gamma, d, futureAGammaTime } = this.context;
 
         if (futureAGammaTime > 0) {
-            d = CurveV2Math.newton_d(
+            d = CryptoPoolMath.newton_d(
                 new BigNumber(ann),
                 new BigNumber(gamma),
                 this.context.xp.map((x) => new BigNumber(x)),
@@ -76,7 +76,7 @@ class CurveV2 {
             xp[1].multipliedBy(price_scale).idiv(this.PRECISION),
         ];
 
-        let y = CurveV2Math.newton_y(
+        let y = CryptoPoolMath.newton_y(
             new BigNumber(ann),
             new BigNumber(gamma),
             xp,
@@ -99,6 +99,6 @@ class CurveV2 {
 }
 
 export {
-    CurveV2,
-    CurveV2Context
+    CryptoPool as CryptoPool,
+    CryptoPoolContext as CryptoPoolContext
 };

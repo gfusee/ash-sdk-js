@@ -15,7 +15,7 @@ export const getPrecisions = (reserves: TokenAmount[]) => {
     }
 };
 
-export const getCurveV2Config = (reserves: TokenAmount[]) => {
+export const getCryptoPoolConfig = (reserves: TokenAmount[]) => {
     const PRECISION = new BigNumber(10 ** 18);
     const A_MULTIPLIER = new BigNumber(10_000);
     const PRECISIONS = getPrecisions(reserves);

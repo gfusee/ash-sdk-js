@@ -12,7 +12,7 @@ import IPool, { RemoveLiquidityResultType } from "../../interface/pool";
 import { queryContractParser } from "../serializer";
 import Contract from "./contract";
 import { IESDTInfo } from "../token/token";
-import { CurveV2, CurveV2Context } from "../cryptoPool/swap";
+import { CryptoPool, CryptoPoolContext } from "../cryptoPool/swap";
 import { TokenAmount } from "../token/tokenAmount";
 import { Fraction } from "../fraction/fraction";
 import { Price } from "../token/price";
@@ -214,13 +214,13 @@ class PoolContract extends Contract<typeof poolAbi> {
 
     public static estimateAmountOut(
         tokens: IESDTInfo[],
-        context: CurveV2Context,
+        context: CryptoPoolContext,
         i: number,
         j: number,
         dx: BigNumber,
     ) {
-        const curveV2 = new CurveV2(tokens, context);
-        return curveV2.estimateAmountOut(i, j, dx);
+        const cryptoPool = new CryptoPool(tokens, context);
+        return cryptoPool.estimateAmountOut(i, j, dx);
     }
 
     public static calculateSwapPrice(

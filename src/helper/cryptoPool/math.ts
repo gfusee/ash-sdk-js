@@ -1,8 +1,8 @@
 import assert from "assert";
 import BigNumber from "bignumber.js";
 import { TokenAmount } from "../token/tokenAmount";
-import { getCurveV2Config } from "./config";
-export class CurveV2Math {
+import { getCryptoPoolConfig } from "./config";
+export class CryptoPoolMath {
     static sort = (A0: BigNumber[]) => {
         const A = [...A0];
         const nCoins = A0.length;
@@ -30,7 +30,7 @@ export class CurveV2Math {
         const nCoins = unsorted_x.length;
         let x = [...unsorted_x];
         if(useSort){
-            x = CurveV2Math.sort(unsorted_x);
+            x = CryptoPoolMath.sort(unsorted_x);
         }
         let D = x[0];
         let diff = new BigNumber(0);
@@ -50,16 +50,16 @@ export class CurveV2Math {
     }
 
     static newton_d(ANN: BigNumber, gamma: BigNumber, x_unsorted: BigNumber[], reserves: TokenAmount[]) {
-        const {N_COINS, A_MULTIPLIER, MIN_A, MAX_A, MIN_GAMMA, MAX_GAMMA, PRECISION} = getCurveV2Config(reserves);
+        const {N_COINS, A_MULTIPLIER, MIN_A, MAX_A, MIN_GAMMA, MAX_GAMMA, PRECISION} = getCryptoPoolConfig(reserves);
         assert(ANN.gt(MIN_A.minus(1)) && ANN.lt(MAX_A.plus(1)), "invalid ann");
         assert(gamma.gt(MIN_GAMMA.minus(1)) && gamma.lt(MAX_GAMMA.plus(1)), "invalid gamma");
 
-        const x = CurveV2Math.sort(x_unsorted);
+        const x = CryptoPoolMath.sort(x_unsorted);
 
         assert(x[0].gt(1e9 - 1) && x[0].lt(new BigNumber(1e15).multipliedBy(1e18).plus(1)), "invalid x0");
         assert(x[1].multipliedBy(1e18).idiv(x[0]).gt(1e14 - 1), "invalid x1");
 
-        let D = CurveV2Math.geometric_mean(x, false).multipliedBy(N_COINS);
+        let D = CryptoPoolMath.geometric_mean(x, false).multipliedBy(N_COINS);
         const S = x.reduce((s, xi) => s.plus(xi), new BigNumber(0));
     
         for (let i = 0; i<255; i++){
@@ -109,7 +109,7 @@ export class CurveV2Math {
     static newton_y(ANN: BigNumber, gamma: BigNumber, x: BigNumber[], D: BigNumber, i: number, reserves: TokenAmount[]) {
         // Calculating x[i] given other balances x[0..N_COINS-1] and invariant D
         // ANN = A * N**N
-        const {N_COINS, MIN_A, MAX_A, MIN_GAMMA, MAX_GAMMA, A_MULTIPLIER, PRECISION} = getCurveV2Config(reserves);
+        const {N_COINS, MIN_A, MAX_A, MIN_GAMMA, MAX_GAMMA, A_MULTIPLIER, PRECISION} = getCryptoPoolConfig(reserves);
         assert(ANN.gt(MIN_A.minus(1)) && ANN.lt(MAX_A.plus(1)), "Unsafe value A");
         assert(gamma.gt(MIN_GAMMA.minus(1)) && gamma.lt(MAX_GAMMA.plus(1)), "Unsafe value gamma");
         assert(D.gt(10**17 - 1) && D.lt(new BigNumber(1e15).multipliedBy(1e18).plus(1)), "invalid d");
