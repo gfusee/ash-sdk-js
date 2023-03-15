@@ -9,23 +9,24 @@ import {
 import poolAbi from "../../../assets/abi/pool.abi.json";
 import BigNumber from "bignumber.js";
 import IPool, { RemoveLiquidityResultType } from "../../interface/pool";
-import { getProxyNetworkProvider } from "../proxy/util";
 import { queryContractParser } from "../serializer";
 import Contract from "./contract";
 import { IESDTInfo } from "../token/token";
-import { CurveV2, CurveV2Context } from "../curveV2/swap";
+import { CurveV2, CurveV2Context } from "../cryptoPool/swap";
 import { TokenAmount } from "../token/tokenAmount";
 import { Fraction } from "../fraction/fraction";
 import { Price } from "../token/price";
 import { calculateSwapPrice } from "../stableswap/calculator/price";
 import { calculateEstimatedSwapOutputAmount2 } from "../stableswap/calculator/amounts";
+import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
+import { getDefaultProxyNetworkProvider } from "../proxy/util";
 
 const getAmountOutMaiarPool = async (
     poolAddress: string,
     tokenFromId: string,
-    amountIn: BigNumber
+    amountIn: BigNumber,
+    proxy: ProxyNetworkProvider = getDefaultProxyNetworkProvider(),
 ): Promise<BigNumber> => {
-    const proxy = getProxyNetworkProvider();
     try {
         const { returnData } = await proxy.queryContract(
             new Query({
@@ -59,8 +60,10 @@ const calculateAmountOut = async (
         .then((val) => val.amount_out);
 };
 
-const getReserveMaiarPool = async (pool: IPool) => {
-    const proxy = getProxyNetworkProvider();
+const getReserveMaiarPool = async (
+    pool: IPool, 
+    proxy: ProxyNetworkProvider = getDefaultProxyNetworkProvider(),
+) => {
     const res = await proxy.queryContract(
         new Query({
             address: new Address(pool.address),

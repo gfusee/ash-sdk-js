@@ -2,15 +2,17 @@ import {
     AbiRegistry, Address, ArgSerializer,
     EndpointParameterDefinition, Interaction, ResultsParser, SmartContract, SmartContractAbi
 } from "@multiversx/sdk-core/out";
+import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
 import { gasLimitBuffer, gasPrice, maxGasLimit } from "../../const/dappConfig";
-import { getProxyNetworkProvider } from "../proxy/util";
+import { getDefaultProxyNetworkProvider } from "../proxy/util";
 import { ChainId } from "../token/token";
 
 type AbiType = {
     types: Record<string, any>;
 }
 export default class Contract<T extends AbiType = any> {
-    protected chainId = ChainId.Devnet;
+    protected chainId = ChainId.Mainnet;
+    protected proxy: ProxyNetworkProvider = getDefaultProxyNetworkProvider();
 
     protected resultParser = new ResultsParser();
     address: Address;
@@ -27,7 +29,7 @@ export default class Contract<T extends AbiType = any> {
         });
     }
     protected getProxy() {
-        return getProxyNetworkProvider();
+        return this.proxy;
     }
 
     protected interceptInteraction(interaction: Interaction) {
@@ -64,6 +66,11 @@ export default class Contract<T extends AbiType = any> {
 
     onChain(chainId: ChainId) {
         this.chainId = chainId;
+        return this;
+    }
+
+    onProxy(proxy: ProxyNetworkProvider) {
+        this.proxy = proxy;
         return this;
     }
 

@@ -19,7 +19,7 @@
         "incremental": true
     },
     "include": [
-        "src/**/*",
+        "src/**/*", "example/example.ts",
     ],
     "exclude": [
         "node_modules"
