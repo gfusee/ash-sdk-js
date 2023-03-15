@@ -1,15 +1,37 @@
 import { Address, TokenPayment, Transaction } from "@multiversx/sdk-core/out";
-import { ASHSWAP_CONFIG } from "../src/const/ashswapConfig";
 import { ContractManager } from "../src/helper/contracts";
+import { MAINNET_TOKENS } from "../src/const/tokens";
+import { mainnetPools } from "../src/const/pool";
+
+
 import BigNumber from "bignumber.js";
 
 describe("testing pool constract", () => {
-    const contract = ContractManager.getPoolContract(Address.Zero().bech32());
-
+    const poolAddress = mainnetPools[0].address;
+    const poolContract = ContractManager.getPoolContract(poolAddress);
+    const tokenIn = MAINNET_TOKENS[0];
+    const tokenOut = MAINNET_TOKENS[1];
+    const tokenPayment = TokenPayment.fungibleFromBigInteger(
+        tokenIn.identifier,
+        new BigNumber(10),
+        tokenIn.decimals
+    );
+    
     test("#addLiquidity", async () => {
-        const tokenPayment = TokenPayment.fungibleFromBigInteger("", new BigNumber(0), 0)
+        
         const tokenPayments = [tokenPayment]
-        const tx = await contract.addLiquidity("", tokenPayments, new BigNumber(0)) ;
+        const tx = await poolContract.addLiquidity(Address.Zero().bech32(), tokenPayments, new BigNumber(0)) ;
+
+        expect(tx).toBeInstanceOf(Transaction);
+    });
+
+    test("#exchange", async () => {
+        
+        const tx = await poolContract.exchange(
+            tokenPayment,
+            tokenOut.identifier,
+            new BigNumber(1),
+        );
 
         expect(tx).toBeInstanceOf(Transaction);
     });
