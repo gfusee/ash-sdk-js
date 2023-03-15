@@ -25,3 +25,7 @@ async function example() {
 
     const contract = queryPoolContract.getAmountOutMaiarPool("", "", new BigNumber(0));
 }
+
+export function add(a: number, b: number): number {
+    return a + b;
+}
