@@ -1,16 +1,14 @@
 import { Address, TokenPayment, Transaction } from "@multiversx/sdk-core/out";
 import { ContractManager } from "../src/helper/contracts";
-import { MAINNET_TOKENS } from "../src/const/tokens";
 import { mainnetPools } from "../src/const/pool";
-
-
 import BigNumber from "bignumber.js";
+import { MAINNET_TOKENS_MAP } from "../src/const/tokens";
 
 describe("testing pool constract", () => {
     const poolAddress = mainnetPools[0].address;
     const poolContract = ContractManager.getPoolContract(poolAddress);
-    const tokenIn = MAINNET_TOKENS[0];
-    const tokenOut = MAINNET_TOKENS[1];
+    const tokenIn = MAINNET_TOKENS_MAP["EGLD"]
+    const tokenOut = MAINNET_TOKENS_MAP["ASH-a642d1"];
     const tokenPayment = TokenPayment.fungibleFromBigInteger(
         tokenIn.identifier,
         new BigNumber(10),

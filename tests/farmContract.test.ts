@@ -1,5 +1,4 @@
 import { Address, TokenPayment, Transaction } from "@multiversx/sdk-core/out";
-import { ASHSWAP_CONFIG } from "../src/const/ashswapConfig";
 import { ContractManager } from "../src/helper/contracts";
 import { MAINNET_FARMS } from "../src/const/farms";
 import BigNumber from "bignumber.js";
@@ -11,7 +10,7 @@ describe("testing farm constract", () => {
         farm.farm_address
     );  
 
-    test("#checkpointFarmRewards", async () => {
+    test("#enterFarm", async () => {
         const stakeAmt = new BigNumber(1);
 
         const farmTokenInWallet: IMetaESDT[] = [];
@@ -36,6 +35,43 @@ describe("testing farm constract", () => {
         );
 
         expect(tx).toBeInstanceOf(Transaction);
+    });
+
+    test("#exitFarm", async () => {
+        const farmToken: IMetaESDT[] = [];
+
+        const tokenPayments = farmToken.map((t) =>
+            TokenPayment.metaEsdtFromBigInteger(
+                t.collection,
+                t.nonce,
+                t.balance
+            )
+        );
+        const tx = await farmContract.exitFarm(
+            Address.Zero().bech32(),
+            tokenPayments,
+        );
+
+        expect(tx).toBeInstanceOf(Array);
+    });
+
+    test("#claimRewards", async () => {
+        const farmToken: IMetaESDT[] = [];
+
+        const tokenPayments = farmToken.map((t) =>
+            TokenPayment.metaEsdtFromBigInteger(
+                t.collection,
+                t.nonce,
+                t.balance,
+                farm.farm_token_decimal
+            )
+        );
+        const tx = await farmContract.claimRewards(
+            Address.Zero().bech32(),
+            tokenPayments,
+        );
+
+        expect(tx).toBeInstanceOf(Array);
     });
 
     test("#checkpointFarmRewards", async () => {

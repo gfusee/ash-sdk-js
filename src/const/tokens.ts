@@ -2,7 +2,7 @@ import { ChainId, ESDT, IESDTInfo } from "../helper/token/token";
 
 export const VE_ASH_DECIMALS = 18;
 
-export const DEVNET_TOKENS_ALPHA: IESDTInfo[] = [
+const DEVNET_TOKENS_ALPHA: IESDTInfo[] = [
     {
         identifier: "EGLD",
         chainId: ChainId.Devnet,
@@ -60,7 +60,7 @@ export const DEVNET_TOKENS_ALPHA: IESDTInfo[] = [
         decimals: 18,
     },
 ];
-export const DEVNET_TOKENS_BETA: IESDTInfo[] = [
+const DEVNET_TOKENS_BETA: IESDTInfo[] = [
     {
         identifier: "EGLD",
         chainId: ChainId.Devnet,
@@ -119,7 +119,7 @@ export const DEVNET_TOKENS_BETA: IESDTInfo[] = [
     }
 ];
 
-export const MAINNET_TOKENS: IESDTInfo[] = [
+const MAINNET_TOKENS: IESDTInfo[] = [
     {
         identifier: "EGLD",
         chainId: ChainId.Mainnet,
@@ -163,7 +163,6 @@ export const MAINNET_TOKENS: IESDTInfo[] = [
         decimals: 18,
     },
 ];
-
 
 export const MAINNET_TOKENS_MAP = Object.fromEntries(
     MAINNET_TOKENS.map((t) => [t.identifier, t])
