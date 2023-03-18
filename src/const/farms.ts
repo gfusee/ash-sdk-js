@@ -1,4 +1,6 @@
+import { ashNetwork } from "../helper/contracts";
 import { IFarm } from "../interface/farm";
+import { AshNetwork } from "./env";
 
 type FarmConfig = {
     alpha: IFarm[];
@@ -135,6 +137,27 @@ const mainnet: IFarm[] = [
     },
 ];
 
+function getFarm() {
+    var farm: IFarm[] = [];
+    switch (ashNetwork) {
+        case AshNetwork.DevnetAlpha:
+            farm = devnet.alpha;
+            break;
+        case AshNetwork.DevnetBeta:
+            farm = devnet.beta;
+            break;
+        default:
+            farm = mainnet;
+            break;
+    }
+    return farm;
+}
+
+
+export const FARMS = getFarm();
+export const FARMS_MAP = Object.fromEntries(
+    FARMS.map((f) => [f.farm_address, f])
+);
 export const MAINNET_FARMS = mainnet;
 export const DEVNET_ALPHA_FARMS = devnet.alpha;
 export const DEVNET_BETA_FARMS = devnet.beta;

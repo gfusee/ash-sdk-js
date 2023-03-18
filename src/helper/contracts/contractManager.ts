@@ -1,3 +1,4 @@
+import { AshNetwork } from "../../const/env";
 import FarmBribeContract from "./farmBribeContract";
 import FarmContract from "./farmContract";
 import FarmControllerContract from "./farmControllerContract";
@@ -67,6 +68,11 @@ const getWrappedEGLDContract = (address: string) => {
     );
 };
 
+export let ashNetwork = AshNetwork.Mainnet
+const setAshNetwork = (network: AshNetwork) => {
+    ashNetwork = network
+}
+
 export const ContractManager = {
     getPoolContract,
     getFarmContract,
@@ -76,4 +82,5 @@ export const ContractManager = {
     getFarmBribeContract,
     getPoolV2Contract,
     getWrappedEGLDContract,
+    setAshNetwork
 };

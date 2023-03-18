@@ -1,5 +1,7 @@
+import { ashNetwork } from "../helper/contracts";
 import { ChainId } from "../helper/token/token";
 import IPool, { EPoolType } from "../interface/pool";
+import { AshNetwork } from "./env";
 import { DEVNET_ALPHA_TOKENS_MAP, DEVNET_BETA_TOKENS_MAP, MAINNET_TOKENS_MAP } from "./tokens";
 
 type PoolConfig = {
@@ -171,6 +173,24 @@ const mainnet: IPool[] = [
     },
 ];
 
-export const mainnetPools = [...mainnet];
-export const devnetAlphaPools = [...devnet.alpha];
-export const devnetBetaPools = [...devnet.beta];
+function getPools() {
+    var pools: IPool[] = [];
+    switch (ashNetwork) {
+        case AshNetwork.DevnetAlpha:
+            pools = devnet.alpha;
+            break;
+        case AshNetwork.DevnetBeta:
+            pools = [...devnet.beta];
+            break;
+        default:
+            pools = [...mainnet];
+            break;
+    }
+    return pools;
+}
+
+export const pools = getPools();
+export const POOLS_MAP_ADDRESS = Object.fromEntries(
+    pools.map((p) => [p.address, p])
+);
+

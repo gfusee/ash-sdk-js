@@ -1,64 +1,17 @@
 import { Address, TokenPayment } from "@multiversx/sdk-core/out";
-import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
 import { ContractManager } from '../src/helper/contracts';
-import { MVXProxyNetworkAddress } from "../src/helper/proxy/util";
-import { ChainId } from "../src/helper/token/token";
-import { mainnetPools } from "../src/const/pool";
-import { MAINNET_TOKENS_MAP } from "../src/const/tokens";
-import { MAINNET_FARMS } from "../src/const/farms";
+import { FARMS_MAP, MAINNET_FARMS } from "../src/const/farms";
 import { IMetaESDT } from "../src/interface/tokens";
-import { queryPoolContract } from "../src/helper/contracts/pool";
 import BigNumber from "bignumber.js";
+import { AshNetwork } from "../src/const/env";
+import { FarmTokenAttrs } from "../src/interface/farm";
 
-swap();
-
-async function swap() {
-
-    const proxy = new ProxyNetworkProvider(MVXProxyNetworkAddress.Mainnet)
-    const tokenIn = MAINNET_TOKENS_MAP["EGLD"]
-    const tokenOut = MAINNET_TOKENS_MAP["ASH-a642d1"];
-    const poolAddress = mainnetPools[0].address;
-    const tokenPayment = TokenPayment.fungibleFromBigInteger(
-        tokenIn.identifier,
-        new BigNumber(10),
-        tokenIn.decimals
-    );
-
-    const poolContract = ContractManager.getPoolContract(
-        poolAddress
-    ).onChain(ChainId.Mainnet).onProxy(proxy);
-
-    const tx = await poolContract.exchange(
-        tokenPayment,
-        tokenOut.identifier,
-        new BigNumber(1),
-    );
-
-    return tx;
-
-}
-
-async function getAmountOut() {
-    const tokenIn = MAINNET_TOKENS_MAP["EGLD"]
-    const tokenOut = MAINNET_TOKENS_MAP["ASH-a642d1"];
-    const pool = mainnetPools[0];
-    return await queryPoolContract.calculateAmountOut(
-        pool,
-        tokenIn.identifier,
-        tokenOut.identifier,
-        new BigNumber(1)
-    );
-}
-
-async function getReserve() {
-    const pool = mainnetPools[0];
-    return await queryPoolContract.getReserveMaiarPool(
-        pool
-    );
-}
+const farmAddress = "erd1qqqqqqqqqqqqqpgqe9hhqvvw9ssj6y388pf6gznwhuavhkzc4fvs0ra2fe"
+ContractManager.setAshNetwork(AshNetwork.Mainnet)
+stake()
 
 async function stake() {
-    const farm = MAINNET_FARMS[0]
+    const farm = FARMS_MAP[farmAddress];
     const farmContract = ContractManager.getFarmContract(
         farm.farm_address
     );
@@ -89,7 +42,7 @@ async function stake() {
 }
 
 async function unstake() {
-    const farm = MAINNET_FARMS[0]
+    const farm = FARMS_MAP[farmAddress];
     const farmContract = ContractManager.getFarmContract(
         farm.farm_address
     );
@@ -111,7 +64,7 @@ async function unstake() {
 }
 
 async function claim() {
-    const farm = MAINNET_FARMS[0]
+    const farm = FARMS_MAP[farmAddress];
     const farmContract = ContractManager.getFarmContract(
         farm.farm_address
     );
@@ -132,3 +85,37 @@ async function claim() {
     );
     return tx;
 }
+
+async function calculateRewardsForGivenPosition() {
+    const farm = FARMS_MAP[farmAddress];
+    const farmContract = ContractManager.getFarmContract(
+        farm.farm_address
+    );
+
+    const farmToken: IMetaESDT[] = [];
+    const estimateds = await Promise.all(
+        farmToken.map((t) => {
+            return farmContract.calculateRewardsForGivenPosition(
+                t.balance,
+                farmContract.parseCustomType<FarmTokenAttrs>(
+                    t.attributes,
+                    "FarmTokenAttributes"
+                )
+            );
+        })
+    );
+    const queryReward = estimateds.reduce((s, e) => s.plus(e), new BigNumber(0));
+    return queryReward;
+}
+
+async function getSlopeBoosted() {
+    const farm = FARMS_MAP[farmAddress];
+    const farmContract = ContractManager.getFarmContract(
+        farm.farm_address
+    );
+
+    return await farmContract.getSlopeBoosted(
+        Address.Zero().bech32(),
+    );
+}
+

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node example/example.ts",
+    "start": "ts-node example/farm.ts",
     "test": "jest"
   },
   "author": "",
