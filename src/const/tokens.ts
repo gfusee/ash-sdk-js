@@ -1,4 +1,6 @@
+import { ashNetwork } from "../helper/contracts";
 import { ChainId, ESDT, IESDTInfo } from "../helper/token/token";
+import { AshNetwork } from "./env";
 
 export const VE_ASH_DECIMALS = 18;
 
@@ -164,6 +166,25 @@ const MAINNET_TOKENS: IESDTInfo[] = [
     },
 ];
 
+function getTokens() {
+    var tokens: IESDTInfo[] = [];
+    switch (ashNetwork) {
+        case AshNetwork.DevnetAlpha:
+            tokens = DEVNET_TOKENS_ALPHA;
+            break;
+        case AshNetwork.DevnetBeta:
+            tokens = DEVNET_TOKENS_BETA;
+            break;
+        default:
+            tokens = MAINNET_TOKENS;
+            break;
+    }
+    return tokens;
+}
+export const TOKENS = getTokens();
+export const TOKENS_MAP = Object.fromEntries(
+    TOKENS.map((t) => [t.identifier, t])
+);
 export const MAINNET_TOKENS_MAP = Object.fromEntries(
     MAINNET_TOKENS.map((t) => [t.identifier, t])
 );
