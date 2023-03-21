@@ -119,3 +119,18 @@ async function getSlopeBoosted() {
     );
 }
 
+async function queryFarm() {
+    const farm = FARMS_MAP[farmAddress];
+    const farmContract = ContractManager.getFarmContract(
+        farm.farm_address
+    );
+
+    const farmTokenId = await farmContract.getFarmTokenId();
+    const rewardTokenId = await farmContract.getRewardTokenId();
+    const farmingTokenId = await farmContract.getFarmingTokenId();
+    const rewardPerSec = await farmContract.getRewardPerSec();
+    const rewardPerShare = await farmContract.getRewardPerShare();
+    const lastRewardBlockTs = await farmContract.getLastRewardBlockTs();
+    const divisionSafetyConstant = await farmContract.getDivisionSafetyConstant();
+}
+

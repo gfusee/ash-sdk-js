@@ -151,7 +151,8 @@ class FarmContract extends Contract<typeof farmAbi> {
 
     async getFarmTokenId() {
         const interaction = this.contract.methods.getFarmTokenId([]);
-        return this.interceptInteraction(interaction).check().buildTransaction();
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as string) || "";
     }
 
     async setFarmTokenId(tokenId: string) {
@@ -161,12 +162,32 @@ class FarmContract extends Contract<typeof farmAbi> {
 
     async getFarmingTokenId() {
         const interaction = this.contract.methods.getFarmingTokenId([]);
-        return this.interceptInteraction(interaction).check().buildTransaction();
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as string) || "";
     }
 
     async getRewardTokenId() {
         const interaction = this.contract.methods.getRewardTokenId([]);
-        return this.interceptInteraction(interaction).check().buildTransaction();
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as string) || "";
+    }
+
+    async getProduceRewardEnabled() {
+        let interaction = this.contract.methods.getProduceRewardEnabled([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as boolean) || false;
+    }
+
+    async getLastRewardBlockTs() {
+        let interaction = this.contract.methods.getLastRewardBlockTs([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as number) || 0;
+    }
+
+    async getDivisionSafetyConstant() {
+        let interaction = this.contract.methods.getDivisionSafetyConstant([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as BigNumber) || new BigNumber(0);
     }
 
     async getRewardPerSec() {
@@ -175,6 +196,11 @@ class FarmContract extends Contract<typeof farmAbi> {
         return (firstValue?.valueOf() as BigNumber) || new BigNumber(0);
     }
 
+    async getRewardPerShare() {
+        let interaction = this.contract.methods.getRewardPerShare([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as BigNumber) || new BigNumber(0);
+    }
 
     async setAdditionalRewards(tokenId: string, rewardPerSec: BigNumber, periodRewardEnd: number) {
         const interaction = this.contract.methods.setAdditionalRewards([tokenId, rewardPerSec, periodRewardEnd]);

@@ -61,7 +61,7 @@ const calculateAmountOut = async (
 };
 
 const getReserveMaiarPool = async (
-    pool: IPool, 
+    pool: IPool,
     proxy: ProxyNetworkProvider = getDefaultProxyNetworkProvider(),
 ) => {
     const res = await proxy.queryContract(
@@ -212,15 +212,81 @@ class PoolContract extends Contract<typeof poolAbi> {
             .buildTransaction();
     }
 
+    async getAmpFactor() {
+        let interaction = this.contract.methods.getAmpFactor([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as number) || 0;
+    }
+
+    async getLpToken() {
+        let interaction = this.contract.methods.getLpTokenIdentifier([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return firstValue?.valueOf();
+    }
+
+    async getTokens() {
+        let interaction = this.contract.methods.getTokens([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return firstValue?.valueOf() as string[] || [];
+    }
+
+    async getBalances(tokenId: string) {
+        let interaction = this.contract.methods.getBalances([tokenId]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as BigNumber) || new BigNumber(0);
+    }
+
+    async getReserves() {
+        const reserves = (await this.getTokens())
+            .map((token => this.getBalances(token)))
+        return await Promise.all(reserves);
+    }
+
+    async getRates(tokenId: string) {
+        let interaction = this.contract.methods.getRates([tokenId]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as BigNumber) || new BigNumber(0);
+    }
+
+    async getSwapFeePercent() {
+        let interaction = this.contract.methods.getSwapFeePercent([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as number) || 0;
+    }
+
+    async getAdminFeePercent() {
+        let interaction = this.contract.methods.getAdminFeePercent([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as number) || 0;
+    }
+
+    async getTotalSupply() {
+        let interaction = this.contract.methods.getTotalSupply([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as BigNumber) || new BigNumber(0);
+    }
+
+    async getVirtualPrice() {
+        let interaction = this.contract.methods.getVirtualPrice([]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as BigNumber) || new BigNumber(0);
+    }
+
+    async getTokenPrice(tokenId: string, precision: BigNumber) {
+        let interaction = this.contract.methods.getTokenPrice([tokenId, precision]);
+        const { firstValue } = await this.runQuery(interaction);
+        return (firstValue?.valueOf() as BigNumber) || new BigNumber(0);
+    }
+
     public static estimateAmountOut(
         tokens: IESDTInfo[],
         context: CryptoPoolContext,
-        i: number,
-        j: number,
-        dx: BigNumber,
+        tokenInIndex: number,
+        tokenOutIndex: number,
+        amout: BigNumber,
     ) {
         const cryptoPool = new CryptoPool(tokens, context);
-        return cryptoPool.estimateAmountOut(i, j, dx);
+        return cryptoPool.estimateAmountOut(tokenInIndex, tokenOutIndex, amout);
     }
 
     public static calculateSwapPrice(

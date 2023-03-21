@@ -7,10 +7,11 @@ The Pool Contract acts as an AMM for trading tokens. The AMM is based on Curve's
 The trading fee will stay in the liquidity pool to leverage LP holder interest. The admin fee will be sent to the veASH holder.
 
 ```typescript
+    //Example of swap
+
     const proxy = new ProxyNetworkProvider(MVXProxyNetworkAddress.Mainnet)
-    const tokenIn = MAINNET_TOKENS[0];
-    const tokenOut = MAINNET_TOKENS[1];
-    const poolAddress = mainnetPools[0].address;
+    const tokenIn = TOKENS_MAP["EGLD"]
+    const tokenOut = TOKENS_MAP["ASH-a642d1"];
     const tokenPayment = TokenPayment.fungibleFromBigInteger(
         tokenIn.identifier,
         new BigNumber(10),
@@ -35,7 +36,9 @@ The Farm Contract is a contract where users can lock their LP token to receive A
 Following Maiar Exchange, the farm position is represented by Farm Token, which is a Semi-Fungible Token. The reasoning behind this is that to calculate the reward for the token owner without storing anything on a smart contract.
 
 ```typescript
-    const farm = MAINNET_FARMS[0]
+    //Example of stake
+
+    const farm = FARMS_MAP[farmAddress];
     const farmContract = ContractManager.getFarmContract(
         farm.farm_address
     );
