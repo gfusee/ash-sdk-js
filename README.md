@@ -30,6 +30,8 @@ The trading fee will stay in the liquidity pool to leverage LP holder interest. 
 
 ```
 
+See more in [example](example/pool.ts)
+
 ## Farm Contract
 The Farm Contract is a contract where users can lock their LP token to receive ASH.
 
@@ -66,6 +68,7 @@ Following Maiar Exchange, the farm position is represented by Farm Token, which 
         tokenPayments,
     );
 ```
+See more in [example](example/farm.ts)
 
 ## Voting Escrow Contract (DAO)
 Contract where users can lock their ASH token for pre-set periods to gain veASH (Votes). Votes have weight depending on time. A user who has veASH can receive an admin fee from Pool Contract as their reward.
@@ -76,6 +79,7 @@ Besides that, they can use their veASH as a voting weight in the DAO voting syst
     const contract = ContractManager.getVotingEscrowContract("erd1...");
     const tx = await contract.withdraw();
 ```
+See more in [example](example/votingEscrow.ts)
 
 ## Fee Distributor Contract
 The contract contains the admin fee that is collected from Pools and distribute it into veASH owner.
@@ -84,4 +88,5 @@ The contract contains the admin fee that is collected from Pools and distribute 
     const contract = ContractManager.getFeeDistributorContract("erd1...");
     const tx = await contract.claim(new Address("erd1..."));
 ```
+See more in [example](example/freeDistributor.ts)
 
