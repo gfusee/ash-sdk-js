@@ -1,10 +1,10 @@
 {
-  "name": "ash-sdk-js",
+  "name": "@ashswap/ash-sdk-js",
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node example/farm.ts",
+    "start": "ts-node example/pool.ts",
     "test": "jest"
   },
   "author": "",

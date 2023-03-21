@@ -173,10 +173,10 @@ class PoolV2Contract extends Contract<typeof poolV2Abi> {
         return (firstValue?.valueOf() as BigNumber) || new BigNumber(0);
     }
 
-    async getXcpProfit() {
+    async getXp() {
         let interaction = this.contract.methods.getXcpProfit([]);
         const { firstValue } = await this.runQuery(interaction);
-        return (firstValue?.valueOf() as BigNumber) || new BigNumber(0);
+        return (firstValue?.valueOf() as BigNumber[]) || [];
     }
 
     async getReserves() {

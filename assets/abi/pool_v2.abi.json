@@ -1,16 +1,16 @@
 {
     "buildInfo": {
         "rustc": {
-            "version": "1.69.0-nightly",
-            "commitHash": "bd39bbb4bb92df439bf6d85470e296cc6a47ffbd",
-            "commitDate": "2023-02-07",
+            "version": "1.70.0-nightly",
+            "commitHash": "511364e7874dba9649a264100407e4bffe7b5425",
+            "commitDate": "2023-03-16",
             "channel": "Nightly",
-            "short": "rustc 1.69.0-nightly (bd39bbb4b 2023-02-07)"
+            "short": "rustc 1.70.0-nightly (511364e78 2023-03-16)"
         },
         "contractCrate": {
             "name": "pool_v2",
             "version": "0.0.0",
-            "git_version": "2d20827-modified"
+            "git_version": "b452f48-modified"
         },
         "framework": {
             "name": "elrond-wasm",
@@ -21,56 +21,56 @@
     "constructor": {
         "inputs": [
             {
-                "name": "_factory",
+                "name": "pool_type",
+                "type": "PoolType"
+            },
+            {
+                "name": "factory",
                 "type": "Address"
             },
             {
-                "name": "_a",
+                "name": "a",
                 "type": "BigUint"
             },
             {
-                "name": "_gamma",
+                "name": "gamma",
                 "type": "BigUint"
             },
             {
-                "name": "_mid_fee",
+                "name": "mid_fee",
                 "type": "BigUint"
             },
             {
-                "name": "_out_fee",
+                "name": "out_fee",
                 "type": "BigUint"
             },
             {
-                "name": "_allowed_extra_profit",
+                "name": "allowed_extra_profit",
                 "type": "BigUint"
             },
             {
-                "name": "_fee_gamma",
+                "name": "fee_gamma",
                 "type": "BigUint"
             },
             {
-                "name": "_adjustment_step",
+                "name": "adjustment_step",
                 "type": "BigUint"
             },
             {
-                "name": "_admin_fee",
+                "name": "admin_fee",
                 "type": "BigUint"
             },
             {
-                "name": "_ma_half_time",
+                "name": "ma_half_time",
                 "type": "u64"
             },
             {
-                "name": "_initial_price",
+                "name": "initial_price",
                 "type": "BigUint"
             },
             {
-                "name": "_precisions",
-                "type": "BigUint"
-            },
-            {
-                "name": "_tokens",
-                "type": "variadic<TokenIdentifier>",
+                "name": "tokens",
+                "type": "variadic<PoolInitAttributes>",
                 "multi_arg": true
             }
         ],
@@ -79,6 +79,26 @@
     "endpoints": [
         {
             "name": "getPrecisions",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "tuple<BigUint,BigUint>"
+                }
+            ]
+        },
+        {
+            "name": "getXp",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "List<BigUint>"
+                }
+            ]
+        },
+        {
+            "name": "getAGamma",
             "mutability": "readonly",
             "inputs": [],
             "outputs": [
@@ -152,33 +172,6 @@
             ]
         },
         {
-            "name": "removeLiquidityOneCoin",
-            "mutability": "mutable",
-            "payableInTokens": [
-                "*"
-            ],
-            "inputs": [
-                {
-                    "name": "i",
-                    "type": "u32"
-                },
-                {
-                    "name": "min_amount",
-                    "type": "BigUint"
-                },
-                {
-                    "name": "opt_receiver",
-                    "type": "optional<Address>",
-                    "multi_arg": true
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "BigUint"
-                }
-            ]
-        },
-        {
             "name": "claimAdminFees",
             "mutability": "mutable",
             "inputs": [],
@@ -190,11 +183,11 @@
             "mutability": "mutable",
             "inputs": [
                 {
-                    "name": "_future_a",
+                    "name": "future_a",
                     "type": "BigUint"
                 },
                 {
-                    "name": "_future_gamma",
+                    "name": "future_gamma",
                     "type": "BigUint"
                 },
                 {
@@ -303,25 +296,6 @@
             ]
         },
         {
-            "name": "estimateRemoveLiquidityOneCoin",
-            "mutability": "readonly",
-            "inputs": [
-                {
-                    "name": "token_amount",
-                    "type": "BigUint"
-                },
-                {
-                    "name": "i",
-                    "type": "u32"
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "BigUint"
-                }
-            ]
-        },
-        {
             "name": "getLpPrice",
             "mutability": "readonly",
             "inputs": [],
@@ -382,6 +356,37 @@
             ]
         },
         {
+            "name": "pause",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "resume",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "activeNoSwaps",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "getState",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "State"
+                }
+            ]
+        },
+        {
             "name": "getLpTokenSupply",
             "mutability": "readonly",
             "inputs": [],
@@ -420,6 +425,16 @@
             "outputs": [
                 {
                     "type": "List<TokenIdentifier>"
+                }
+            ]
+        },
+        {
+            "name": "getPoolType",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "PoolType"
                 }
             ]
         },
@@ -464,7 +479,7 @@
             ]
         },
         {
-            "name": "getInitialAGamma",
+            "name": "getInitialA",
             "mutability": "readonly",
             "inputs": [],
             "outputs": [
@@ -474,7 +489,27 @@
             ]
         },
         {
-            "name": "getFutureAGamma",
+            "name": "getInitialGamma",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "getFutureA",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "getFutureGamma",
             "mutability": "readonly",
             "inputs": [],
             "outputs": [
@@ -719,7 +754,11 @@
                     "type": "BigUint"
                 },
                 {
-                    "name": "token_supply",
+                    "name": "lp_token_supply",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "lp_token_amount",
                     "type": "BigUint"
                 }
             ]
@@ -728,7 +767,7 @@
             "type": "struct",
             "fields": [
                 {
-                    "name": "tokens",
+                    "name": "token",
                     "type": "BigUint"
                 }
             ]
@@ -762,7 +801,7 @@
                 },
                 {
                     "name": "ma_half_time",
-                    "type": "BigUint"
+                    "type": "u64"
                 }
             ]
         },
@@ -795,7 +834,41 @@
                 },
                 {
                     "name": "ma_half_time",
+                    "type": "u64"
+                }
+            ]
+        },
+        "PoolInitAttributes": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "token",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "rate",
                     "type": "BigUint"
+                }
+            ]
+        },
+        "PoolType": {
+            "type": "enum",
+            "variants": [
+                {
+                    "name": "PlainPool",
+                    "discriminant": 0
+                },
+                {
+                    "name": "LendingPool",
+                    "discriminant": 1
+                },
+                {
+                    "name": "MetaPool",
+                    "discriminant": 2
+                },
+                {
+                    "name": "PoolV2",
+                    "discriminant": 3
                 }
             ]
         },
@@ -804,19 +877,19 @@
             "fields": [
                 {
                     "name": "initial_a",
-                    "type": "u64"
+                    "type": "BigUint"
                 },
                 {
                     "name": "future_a",
-                    "type": "u64"
+                    "type": "BigUint"
                 },
                 {
                     "name": "initial_gamma",
-                    "type": "u64"
+                    "type": "BigUint"
                 },
                 {
                     "name": "future_gamma",
-                    "type": "u64"
+                    "type": "BigUint"
                 },
                 {
                     "name": "initial_time",
@@ -836,25 +909,29 @@
                     "type": "List<BigUint>"
                 },
                 {
-                    "name": "token_supply",
+                    "name": "lp_token_supply",
+                    "type": "BigUint"
+                },
+                {
+                    "name": "lp_token_amount",
                     "type": "BigUint"
                 }
             ]
         },
-        "RemoveLiquidityOneEvent": {
-            "type": "struct",
-            "fields": [
+        "State": {
+            "type": "enum",
+            "variants": [
                 {
-                    "name": "token_amount",
-                    "type": "BigUint"
+                    "name": "Inactive",
+                    "discriminant": 0
                 },
                 {
-                    "name": "coin_index",
-                    "type": "u64"
+                    "name": "Active",
+                    "discriminant": 1
                 },
                 {
-                    "name": "coin_amount",
-                    "type": "BigUint"
+                    "name": "ActiveNoSwaps",
+                    "discriminant": 2
                 }
             ]
         },
@@ -863,11 +940,11 @@
             "fields": [
                 {
                     "name": "current_a",
-                    "type": "u64"
+                    "type": "BigUint"
                 },
                 {
                     "name": "current_gamma",
-                    "type": "u64"
+                    "type": "BigUint"
                 },
                 {
                     "name": "time",

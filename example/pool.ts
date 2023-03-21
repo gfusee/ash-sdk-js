@@ -15,6 +15,7 @@ import { EPoolType } from "../src/interface/pool";
 
 const poolAddress = "erd1qqqqqqqqqqqqqpgqs8p2v9wr8j48vqrmudcj94wu47kqra3r4fvshfyd9c"
 ContractManager.setAshNetwork(AshNetwork.Mainnet)
+estimateAmountOut()
 
 async function swap() {
 
@@ -60,7 +61,7 @@ async function estimateAmountOut() {
             poolAddress
         );
         const amp = await poolContract.getA();
-        const xp = await poolContract.getXcpProfit();
+        const xp = await poolContract.getXp();
         const reserves = await poolContract.getReserves();
         const priceScale = await poolContract.getPriceScale();
         const gamma = await poolContract.getGamma();
@@ -82,7 +83,7 @@ async function estimateAmountOut() {
             gamma: gamma,
             d: d,
             futureAGammaTime: futureAGammaTime,
-            xp: [xp],
+            xp: xp,
             feeGamma: feeGamma,
             midFee: midFee,
             outFee: outFee
