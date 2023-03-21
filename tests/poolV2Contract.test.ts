@@ -32,5 +32,14 @@ describe("testing poolV2 constract", () => {
     });
 
 
+    test("#exchange", async () => {
+        
+        const tx = await poolV2Contract.exchange(
+            tokenPayment,
+            new BigNumber(1),
+        );
+
+        expect(tx).toBeInstanceOf(Transaction);
+    });
    
 });

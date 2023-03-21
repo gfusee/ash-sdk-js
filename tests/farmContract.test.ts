@@ -80,5 +80,16 @@ describe("testing farm constract", () => {
         expect(tx).toBeInstanceOf(Transaction);
     });
 
+    test("#queryFarm", async () => {
+        
+        const farmTokenId = await farmContract.getFarmTokenId();
+        const rewardTokenId = await farmContract.getRewardTokenId();
+        const farmingTokenId = await farmContract.getFarmingTokenId();
+        const rewardPerSec = await farmContract.getRewardPerSec();
+        const rewardPerShare = await farmContract.getRewardPerShare();
+        const lastRewardBlockTs = await farmContract.getLastRewardBlockTs();
+        const divisionSafetyConstant = await farmContract.getDivisionSafetyConstant();
+    });
+
    
 });

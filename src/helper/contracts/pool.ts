@@ -17,7 +17,7 @@ import { TokenAmount } from "../token/tokenAmount";
 import { Fraction } from "../fraction/fraction";
 import { Price } from "../token/price";
 import { calculateSwapPrice } from "../stableswap/calculator/price";
-import { calculateEstimatedSwapOutputAmount2 } from "../stableswap/calculator/amounts";
+import { calculateEstimatedSwapOutputAmount } from "../stableswap/calculator/amounts";
 import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
 import { getDefaultProxyNetworkProvider } from "../proxy/util";
 
@@ -46,7 +46,7 @@ const getAmountOutMaiarPool = async (
     return new BigNumber(0);
 };
 
-const calculateAmountOut = async (
+const estimateAmountOut = async (
     pool: IPool,
     tokenFromId: string,
     tokenToId: string,
@@ -55,9 +55,10 @@ const calculateAmountOut = async (
     if (pool.isMaiarPool) {
         return await getAmountOutMaiarPool(pool.address, tokenFromId, amountIn);
     }
-    return await new PoolContract(pool.address)
+    const result = await new PoolContract(pool.address)
         .getAmountOut(tokenFromId, tokenToId, amountIn)
-        .then((val) => val.amount_out);
+        // .then((val) => val.amount_out);
+    return result.amount_out as BigNumber;
 };
 
 const getReserveMaiarPool = async (
@@ -82,7 +83,7 @@ const getReserveMaiarPool = async (
 
 export const queryPoolContract = {
     getAmountOutMaiarPool,
-    calculateAmountOut,
+    estimateAmountOut,
     getReserveMaiarPool,
 };
 class PoolContract extends Contract<typeof poolAbi> {
@@ -299,7 +300,7 @@ class PoolContract extends Contract<typeof poolAbi> {
         return calculateSwapPrice(amp, reserves, fromToken, toToken, fees);
     }
 
-    public static calculateEstimatedSwapOutputAmount2(
+    public static calculateEstimatedSwapOutputAmount(
         amp: BigNumber,
         reserves: TokenAmount[],
         fromAmount: TokenAmount,
@@ -309,7 +310,7 @@ class PoolContract extends Contract<typeof poolAbi> {
             admin: Fraction;
         }
     ) {
-        return calculateEstimatedSwapOutputAmount2(amp, reserves, fromAmount, toToken, fees)
+        return calculateEstimatedSwapOutputAmount(amp, reserves, fromAmount, toToken, fees)
     };
 
 }

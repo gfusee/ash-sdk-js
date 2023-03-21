@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { calculateEstimatedSwapOutputAmount2 } from "./amounts";
+import { calculateEstimatedSwapOutputAmount } from "./amounts";
 import { Fraction } from "../../fraction/fraction";
 import { IESDTInfo } from "../../token/token";
 import { TokenAmount } from "../../token/tokenAmount";
@@ -43,7 +43,7 @@ export const calculateSwapPrice = (
     );
 
     const inputAmount = new TokenAmount(fromToken, inputAmountNum);
-    const outputAmount = calculateEstimatedSwapOutputAmount2(
+    const outputAmount = calculateEstimatedSwapOutputAmount(
         amp,
         reserves,
         inputAmount,

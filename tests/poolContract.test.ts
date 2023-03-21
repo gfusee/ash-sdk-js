@@ -1,7 +1,9 @@
 import { Address, TokenPayment, Transaction } from "@multiversx/sdk-core/out";
 import { ContractManager } from "../src/helper/contracts";
 import BigNumber from "bignumber.js";
-import { MAINNET_TOKENS_MAP } from "../src/const/tokens";
+import { MAINNET_TOKENS_MAP, TOKENS_MAP } from "../src/const/tokens";
+import { POOLS_MAP_ADDRESS } from "../src/const/pool";
+import { queryPoolContract } from "../src/helper/contracts/pool";
 
 describe("testing pool constract", () => {
     const poolAddress = "erd1qqqqqqqqqqqqqpgqs8p2v9wr8j48vqrmudcj94wu47kqra3r4fvshfyd9c";
@@ -31,6 +33,17 @@ describe("testing pool constract", () => {
         );
 
         expect(tx).toBeInstanceOf(Transaction);
+    });
+
+    test("#queryPool", async () => {
+        
+        const totalSupply = await poolContract.getTotalSupply();
+        const lpToken = await poolContract.getLpToken();
+        const tokens = await poolContract.getTokens();
+        const reserves = await poolContract.getReserves();
+        const swapFeePercent = await poolContract.getSwapFeePercent();
+        const adminFeePercent = await poolContract.getAdminFeePercent();
+        const ampFactor = await poolContract.getAmpFactor();
     });
 
    

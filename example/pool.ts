@@ -46,7 +46,7 @@ async function getAmountOut() {
     const tokenIn = TOKENS_MAP["EGLD"]
     const tokenOut = TOKENS_MAP["ASH-a642d1"];
     const pool = POOLS_MAP_ADDRESS[poolAddress];
-    return await queryPoolContract.calculateAmountOut(
+    return await queryPoolContract.estimateAmountOut(
         pool,
         tokenIn.identifier,
         tokenOut.identifier,
@@ -112,7 +112,7 @@ async function estimateAmountOut() {
             admin: new Percent(admin || 0, 100_000),
         }
     
-        return await PoolContract.calculateEstimatedSwapOutputAmount2(
+        return await PoolContract.calculateEstimatedSwapOutputAmount(
             new BigNumber(ampFactor),
             reserveAmounts,
             tokenInAmount,

@@ -1,14 +1,14 @@
 {
   "name": "@ashswap/ash-sdk-js",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "AshSwap SDK for JavaScript and TypeScript",
   "main": "index.ts",
   "scripts": {
     "start": "ts-node example/pool.ts",
     "test": "jest"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "AshSwap",
+  "license": "MIT",
   "dependencies": {
     "@multiversx/sdk-core": "11.4.1",
     "@multiversx/sdk-network-providers": "1.2.1",
