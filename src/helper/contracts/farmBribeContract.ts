@@ -1,5 +1,5 @@
 import { Address, TokenPayment } from "@multiversx/sdk-core/out";
-import farmBribeAbi from "../../../assets/abi/farm_bribe.abi.json";
+import farmBribeAbi from "../../abi/farm_bribe.abi.json";
 import Contract from "./contract";
 
 class FarmBribeContract extends Contract<typeof farmBribeAbi> {

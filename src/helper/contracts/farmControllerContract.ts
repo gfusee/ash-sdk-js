@@ -1,5 +1,5 @@
 import Contract from "./contract";
-import farmControllerAbi from "../../../assets/abi/farm_controller.abi.json";
+import farmControllerAbi from "../../abi/farm_controller.abi.json";
 import { Address } from "@multiversx/sdk-core/out";
 import BigNumber from "bignumber.js";
 

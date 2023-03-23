@@ -1,5 +1,5 @@
 import Contract from "./contract";
-import farmAbi from "../../../assets/abi/farm.abi.json";
+import farmAbi from "../../abi/farm.abi.json";
 import { Address, TokenPayment } from "@multiversx/sdk-core/out";
 import BigNumber from "bignumber.js";
 import chunk from "lodash.chunk";

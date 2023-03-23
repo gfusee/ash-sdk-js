@@ -6,7 +6,7 @@ import {
     TokenIdentifierValue,
     TokenPayment,
 } from "@multiversx/sdk-core/out";
-import poolAbi from "../../../assets/abi/pool.abi.json";
+import poolAbi from "../../abi/pool.abi.json";
 import BigNumber from "bignumber.js";
 import IPool, { RemoveLiquidityResultType } from "../../interface/pool";
 import { queryContractParser } from "../serializer";

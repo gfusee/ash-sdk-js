@@ -1,28 +1,33 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "module": "CommonJS",
+        "target": "es2015",
+        "outDir": "out",
         "lib": [
-            "es6",
+            "ES2015"
         ],
+        "incremental": true,
+        "sourceMap": true,
         "allowJs": true,
-        "skipLibCheck": true,
         "strict": true,
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true,
-        "noEmit": true,
+        "strictPropertyInitialization": true,
+        "strictNullChecks": true,
+        "skipLibCheck": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedParameters": true,
         "esModuleInterop": true,
-        "module": "commonjs",
-        "moduleResolution": "node",
+        "declaration": true,
         "resolveJsonModule": true,
-        "isolatedModules": false,
-        "jsx": "preserve",
-        "incremental": true
     },
     "include": [
-        "src/**/*", "example/example.ts",
+        "src/**/*", 
     ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "out",
+        "tests",
+        "example",
     ]
 }
 

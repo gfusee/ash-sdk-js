@@ -1,5 +1,5 @@
 import Contract from "./contract";
-import votingEscowAbi from "../../../assets/abi/voting_escrow.abi.json";
+import votingEscowAbi from "../../abi/voting_escrow.abi.json";
 import { TokenPayment } from "@multiversx/sdk-core/out";
 import BigNumber from "bignumber.js";
 class VotingEscrowContract extends Contract<typeof votingEscowAbi> {

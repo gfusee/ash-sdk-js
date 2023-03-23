@@ -1,5 +1,5 @@
 import { Address, TokenPayment } from "@multiversx/sdk-core/out";
-import poolV2Abi from "../../../assets/abi/pool_v2.abi.json";
+import poolV2Abi from "../../abi/pool_v2.abi.json";
 import BigNumber from "bignumber.js";
 import Contract from "./contract";
 

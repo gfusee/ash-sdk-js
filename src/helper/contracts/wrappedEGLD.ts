@@ -1,5 +1,5 @@
 import { TokenPayment } from "@multiversx/sdk-core/out";
-import wegldAbi from "../../../assets/abi/multiversx-wegld-swap-sc.abi.json";
+import wegldAbi from "../../abi/multiversx-wegld-swap-sc.abi.json";
 import BigNumber from "bignumber.js";
 import Contract from "./contract";
 

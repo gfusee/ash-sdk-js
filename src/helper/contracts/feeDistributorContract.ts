@@ -1,5 +1,5 @@
 import Contract from "./contract";
-import feeDistributorAbi from "../../../assets/abi/fee_distributor.abi.json";
+import feeDistributorAbi from "../../abi/fee_distributor.abi.json";
 import { Address } from "@multiversx/sdk-core/out";
 
 class FeeDistributorContract extends Contract<typeof feeDistributorAbi> {
