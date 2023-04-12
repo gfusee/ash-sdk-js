@@ -21,6 +21,33 @@ import { calculateEstimatedSwapOutputAmount } from "../stableswap/calculator/amo
 import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
 import { getDefaultProxyNetworkProvider } from "../proxy/util";
 
+type TokenAttributes = {
+    reserve: BigNumber;
+    rate: BigNumber;
+};
+type ExchangeAttributes = {
+    token: string;
+    attribute: TokenAttributes;
+    final_amount: BigNumber;
+};
+type ExchangeResultType = {
+    total_fee: BigNumber;
+    admin_fee: BigNumber;
+    token_in: ExchangeAttributes;
+    token_out: ExchangeAttributes;
+};
+type AddLiquidityAttributes = {
+    token: string;
+    attribute: TokenAttributes;
+    amount_added: BigNumber;
+    total_fee: BigNumber;
+    admin_fee: BigNumber;
+};
+type AddLiquidityResultType = {
+    mint_amount: BigNumber;
+    tokens: AddLiquidityAttributes[];
+};
+
 const getAmountOutMaiarPool = async (
     poolAddress: string,
     tokenFromId: string,
@@ -55,10 +82,9 @@ const estimateAmountOut = async (
     if (pool.isMaiarPool) {
         return await getAmountOutMaiarPool(pool.address, tokenFromId, amountIn);
     }
-    const result = await new PoolContract(pool.address)
-        .getAmountOut(tokenFromId, tokenToId, amountIn)
-        // .then((val) => val.amount_out);
-    return result.amount_out as BigNumber;
+    return await new PoolContract(pool.address)
+    .getAmountOut(tokenFromId, tokenToId, amountIn)
+    .then((val) => val.token_out.final_amount);
 };
 
 const getReserveMaiarPool = async (
@@ -87,21 +113,25 @@ export const queryPoolContract = {
     getReserveMaiarPool,
 };
 class PoolContract extends Contract<typeof poolAbi> {
+    private poolType?: "PlainPool" | "LendingPool" | "MetaPool";
     constructor(address: string) {
         super(address, poolAbi);
+    }
+
+    async getPoolType() {
+        if (this.poolType) return this.poolType;
+        let interaction = this.contract.methods.getPoolType();
+        const { firstValue } = await this.runQuery(interaction);
+        const type = firstValue?.valueOf();
+        this.poolType = type?.name;
+        return this.poolType!;
     }
 
     async getAmountOut(
         tokenFromId: string,
         tokenToId: string,
         amountIn: BigNumber
-    ): Promise<{
-        admin_fee: BigNumber;
-        amount_out: BigNumber;
-        token_in_balance: BigNumber;
-        token_out_balance: BigNumber;
-        total_fee: BigNumber;
-    }> {
+    ): Promise<ExchangeResultType> {
         const interaction = this.contract.methods.estimateAmountOut([
             tokenFromId,
             tokenToId,
@@ -122,19 +152,18 @@ class PoolContract extends Contract<typeof poolAbi> {
         mintAmtMin: BigNumber,
         receiver = Address.Zero()
     ) {
+        const type = await this.getPoolType();
         let interaction = this.contract.methods.addLiquidity([
             mintAmtMin,
             receiver,
         ]);
-        if (tokenPayments.length === 1) {
-            interaction
-                .withSingleESDTTransfer(tokenPayments[0])
-                .withGasLimit(10_000_000);
-        } else {
-            interaction
-                .withMultiESDTNFTTransfer(tokenPayments, new Address(sender))
-                .withGasLimit(10_000_000 + tokenPayments.length * 2_000_000);
-        }
+        interaction
+        .withMultiESDTNFTTransfer(tokenPayments, new Address(sender))
+        .withGasLimit(
+            type === "PlainPool"
+                ? 10_000_000 + tokenPayments.length * 2_000_000
+                : 20_000_000
+        ); // 20m gas limit for lendingPool with 2 tokens
         interaction = this.interceptInteraction(interaction);
         return interaction.check().buildTransaction();
     }
@@ -157,22 +186,32 @@ class PoolContract extends Contract<typeof poolAbi> {
         tokenToId: string,
         minWeiOut: BigNumber
     ) {
+        const type = await this.getPoolType();
         let interaction = this.contract.methods.exchange([
             tokenToId,
             minWeiOut,
         ]);
         interaction
             .withSingleESDTTransfer(tokenPayment)
-            .withGasLimit(8_000_000);
+            .withGasLimit(type === "PlainPool" ? 8_000_000 : 15_000_000); // 15m gas limit for lendingPool
         return this.interceptInteraction(interaction)
             .check()
             .buildTransaction();
     }
 
-    async estimateAddLiquidity(tokenAmounts: BigNumber[]) {
-        let interaction = this.contract.methods.estimateAddLiquidity([tokenAmounts]);
-        const res = await this.getProxy().queryContract(interaction.check().buildQuery());
-        const { firstValue } = this.resultParser.parseQueryResponse(res, interaction.getEndpoint());
+    async estimateAddLiquidity(
+        tokenAmounts: BigNumber[]
+    ): Promise<AddLiquidityResultType> {
+        let interaction = this.contract.methods.estimateAddLiquidity([
+            tokenAmounts,
+        ]);
+        const res = await this.getProxy().queryContract(
+            interaction.check().buildQuery()
+        );
+        const { firstValue } = this.resultParser.parseQueryResponse(
+            res,
+            interaction.getEndpoint()
+        );
         return firstValue?.valueOf();
     }
 
