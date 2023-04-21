@@ -55,6 +55,13 @@ const DEVNET_TOKENS_ALPHA: IESDTInfo[] = [
         decimals: 18,
     },
     {
+        identifier: "SEGLD-b8ba9a",
+        chainId: ChainId.Devnet,
+        symbol: "sEGLD",
+        name: "Liquid Staked EGLD",
+        decimals: 18,
+    },
+    {
         identifier: "AEGLD-126d13",
         chainId: ChainId.Devnet,
         symbol: "aEGLD",
@@ -118,7 +125,21 @@ const DEVNET_TOKENS_BETA: IESDTInfo[] = [
         symbol: "UTK",
         name: "Utrust",
         decimals: 18,
-    }
+    },
+    {
+        identifier: "SEGLD-90b353",
+        chainId: ChainId.Devnet,
+        symbol: "sEGLD",
+        name: "Liquid Staked EGLD",
+        decimals: 18,
+    },
+    {
+        identifier: "HSEGLD-8f2360",
+        chainId: ChainId.Devnet,
+        symbol: "HsEGLD",
+        name: "Hatom sEGLD",
+        decimals: 8,
+    },
 ];
 
 const MAINNET_TOKENS: IESDTInfo[] = [
