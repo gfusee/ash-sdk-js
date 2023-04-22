@@ -187,7 +187,7 @@ const MAINNET_TOKENS: IESDTInfo[] = [
     },
 ];
 
-function getTokens() {
+export function getTokens() {
     var tokens: IESDTInfo[] = [];
     switch (ashNetwork) {
         case AshNetwork.DevnetAlpha:
@@ -202,10 +202,17 @@ function getTokens() {
     }
     return tokens;
 }
-export const TOKENS = getTokens();
-export const TOKENS_MAP = Object.fromEntries(
-    TOKENS.map((t) => [t.identifier, t])
-);
+
+export function getTokensMap() {
+    return Object.fromEntries(
+        getTokens().map((token) => [token.identifier, token])
+    );
+}
+
+export function getToken(identifier: string) {
+    return getTokensMap()[identifier];
+}
+
 export const MAINNET_TOKENS_MAP = Object.fromEntries(
     MAINNET_TOKENS.map((t) => [t.identifier, t])
 );
