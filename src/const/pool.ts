@@ -218,7 +218,7 @@ const mainnet: IPool[] = [
     },
 ];
 
-function getPools() {
+export function getPools(): IPool[] {
     var pools: IPool[] = [];
     switch (ashNetwork) {
         case AshNetwork.DevnetAlpha:
@@ -234,8 +234,12 @@ function getPools() {
     return pools;
 }
 
-export const pools = getPools();
-export const POOLS_MAP_ADDRESS = Object.fromEntries(
-    pools.map((p) => [p.address, p])
-);
+export function getPoolsMap() {
+    return Object.fromEntries(
+        getPools().map((p) => [p.address, p])
+    );
+}
 
+export function getPool(address: string) {
+    return getPoolsMap()[address];
+}
