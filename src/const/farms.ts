@@ -159,7 +159,7 @@ const mainnet: IFarm[] = [
     },
 ];
 
-function getFarm() {
+export function getFarms(): IFarm[] {
     var farm: IFarm[] = [];
     switch (ashNetwork) {
         case AshNetwork.DevnetAlpha:
@@ -175,12 +175,14 @@ function getFarm() {
     return farm;
 }
 
+export function getFarmsMap() {
+    return Object.fromEntries(
+        getFarms().map((p) => [p.farm_address, p])
+    );
+}
 
-export const FARMS = getFarm();
-export const FARMS_MAP = Object.fromEntries(
-    FARMS.map((f) => [f.farm_address, f])
-);
-export const MAINNET_FARMS = mainnet;
-export const DEVNET_ALPHA_FARMS = devnet.alpha;
-export const DEVNET_BETA_FARMS = devnet.beta;
+export function getFarm(address: string) {
+    return getFarmsMap()[address];
+}
+
 export const FARM_DIV_SAFETY_CONST = 1_000_000_000_000;

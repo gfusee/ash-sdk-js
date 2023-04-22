@@ -1,17 +1,17 @@
 import { Address, TokenPayment } from "@multiversx/sdk-core/out";
 import { ContractManager } from '../src/helper/contracts';
-import { FARMS_MAP, MAINNET_FARMS } from "../src/const/farms";
 import { IMetaESDT } from "../src/interface/tokens";
 import BigNumber from "bignumber.js";
 import { AshNetwork } from "../src/const/env";
 import { FarmTokenAttrs } from "../src/interface/farm";
+import { getFarm } from "../src/const/farms";
 
 const farmAddress = "erd1qqqqqqqqqqqqqpgqe9hhqvvw9ssj6y388pf6gznwhuavhkzc4fvs0ra2fe"
 ContractManager.setAshNetwork(AshNetwork.Mainnet)
 stake()
 
 async function stake() {
-    const farm = FARMS_MAP[farmAddress];
+    const farm = getFarm(farmAddress);
     const farmContract = ContractManager.getFarmContract(
         farm.farm_address
     );
@@ -42,7 +42,7 @@ async function stake() {
 }
 
 async function unstake() {
-    const farm = FARMS_MAP[farmAddress];
+    const farm = getFarm(farmAddress);
     const farmContract = ContractManager.getFarmContract(
         farm.farm_address
     );
@@ -64,7 +64,7 @@ async function unstake() {
 }
 
 async function claim() {
-    const farm = FARMS_MAP[farmAddress];
+    const farm = getFarm(farmAddress);
     const farmContract = ContractManager.getFarmContract(
         farm.farm_address
     );
@@ -87,7 +87,7 @@ async function claim() {
 }
 
 async function calculateRewardsForGivenPosition() {
-    const farm = FARMS_MAP[farmAddress];
+    const farm = getFarm(farmAddress);
     const farmContract = ContractManager.getFarmContract(
         farm.farm_address
     );
@@ -109,7 +109,7 @@ async function calculateRewardsForGivenPosition() {
 }
 
 async function getSlopeBoosted() {
-    const farm = FARMS_MAP[farmAddress];
+    const farm = getFarm(farmAddress);
     const farmContract = ContractManager.getFarmContract(
         farm.farm_address
     );
@@ -120,7 +120,7 @@ async function getSlopeBoosted() {
 }
 
 async function queryFarm() {
-    const farm = FARMS_MAP[farmAddress];
+    const farm = getFarm(farmAddress);
     const farmContract = ContractManager.getFarmContract(
         farm.farm_address
     );
