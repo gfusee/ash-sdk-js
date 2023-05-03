@@ -3,7 +3,7 @@ import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
 import { ContractManager } from '../src/helper/contracts';
 import { MVXProxyNetworkAddress } from "../src/helper/proxy/util";
 import { ChainId } from "../src/helper/token/token";
-import PoolContract, { queryPoolContract } from "../src/helper/contracts/pool";
+import PoolContract from "../src/helper/contracts/pool";
 import BigNumber from "bignumber.js";
 import { getPool } from "../src/const/pool";
 import { AshNetwork } from "../src/const/env";
@@ -40,18 +40,6 @@ async function swap() {
 
     return tx;
 
-}
-
-async function getAmountOut() {
-    const tokenIn = getToken("EGLD")
-    const tokenOut = getToken("ASH-a642d1");
-    const pool = getPool(poolAddress);
-    return await queryPoolContract.estimateAmountOut(
-        pool,
-        tokenIn.identifier,
-        tokenOut.identifier,
-        new BigNumber(1)
-    );
 }
 
 async function estimateAmountOut() {
